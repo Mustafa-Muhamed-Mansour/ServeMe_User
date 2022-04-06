@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#E6F1F7">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/item_img_employee"
+            android:layout_width="@dimen/_150sdp"
+            android:layout_height="@dimen/_150sdp"
+            android:layout_margin="@dimen/_5sdp"
+            android:layout_centerHorizontal="true"
+            android:src="@mipmap/ic_launcher" />
+
+
+        <TextView
+            android:id="@+id/item_txt_employee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_5sdp"
+            android:text="Name Employee"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_17ssp"
+            android:textStyle="bold"
+            android:layout_below="@id/item_img_employee"
+            android:layout_centerHorizontal="true" />
+
+    </RelativeLayout>
+</layout>

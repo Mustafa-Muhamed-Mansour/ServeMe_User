@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+  <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#E6F1F7"
+        >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".employee.EmployeeDetailFragment"
+        >
+
+        <ImageView
+            android:id="@+id/img_employee_detail"
+            android:layout_width="@dimen/_130sdp"
+            android:layout_height="@dimen/_130sdp"
+            android:layout_margin="@dimen/_5sdp"
+            android:src="@drawable/ic_launcher_background"
+            />
+
+        <Button
+            android:id="@+id/btn_open_now"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_5sdp"
+            android:background="@color/white"
+            app:backgroundTint="@null"
+            android:clickable="false"
+            android:text="Open now"
+            android:textAllCaps="false"
+            android:textColor="#389A3C"
+            android:textSize="@dimen/_16ssp"
+            android:layout_alignParentEnd="true"
+            />
+
+<!--        #1FC32A-->
+
+        <Button
+            android:id="@+id/btn_book_now"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_5sdp"
+            android:background="#B30909"
+            app:backgroundTint="@null"
+            android:clickable="false"
+            android:text="Book now"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_16ssp"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@id/btn_open_now"
+            />
+
+        <LinearLayout
+            android:id="@+id/linear_names"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_5sdp"
+            android:layout_below="@id/img_employee_detail"
+            android:orientation="horizontal"
+            >
+
+
+            <TextView
+                android:id="@+id/txt_fn_employee_detail"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_15ssp"
+                android:hint="First name"
+                android:textColorHint="@color/black"
+                android:layout_margin="@dimen/_3sdp"
+                android:padding="@dimen/_5sdp"
+                android:drawableStart="@drawable/ic_name"
+                android:drawablePadding="@dimen/_5sdp"
+                />
+
+            <TextView
+                android:id="@+id/txt_ln_employee_detail"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_15ssp"
+                android:hint="Last name"
+                android:textColorHint="@color/black"
+                android:layout_margin="@dimen/_3sdp"
+                android:padding="@dimen/_5sdp"
+                android:drawableStart="@drawable/ic_name"
+                android:drawablePadding="@dimen/_5sdp"
+                />
+
+        </LinearLayout>
+
+<!--        <TextView-->
+<!--            android:id="@+id/txt_phone_number_employee_detail"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:textSize="@dimen/_15ssp"-->
+<!--            android:hint="Phone number"-->
+<!--            android:textColorHint="@color/black"-->
+<!--            android:layout_margin="@dimen/_5sdp"-->
+<!--            android:padding="@dimen/_5sdp"-->
+<!--            android:drawableStart="@drawable/ic_phone"-->
+<!--            android:drawablePadding="@dimen/_5sdp"-->
+<!--            android:layout_below="@id/linear_names"-->
+<!--            android:layout_centerHorizontal="true"-->
+<!--            />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/txt_gender_employee_detail"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:textSize="@dimen/_15ssp"-->
+<!--            android:hint="Gender"-->
+<!--            android:textColorHint="@color/black"-->
+<!--            android:layout_margin="@dimen/_5sdp"-->
+<!--            android:padding="@dimen/_5sdp"-->
+<!--            android:layout_below="@id/txt_pictures"-->
+<!--            android:layout_alignParentEnd="true"-->
+<!--            />-->
+
+        <TextView
+            android:id="@+id/txt_job_employee_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_15ssp"
+            android:hint="Job"
+            android:textColorHint="@color/black"
+            android:layout_margin="@dimen/_5sdp"
+            android:padding="@dimen/_5sdp"
+            android:drawableStart="@drawable/ic_work"
+            android:drawablePadding="@dimen/_5sdp"
+            android:layout_below="@id/linear_names"
+            />
+
+        <TextView
+            android:id="@+id/txt_pictures"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pictures of previous work"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_15ssp"
+            android:textStyle="bold"
+            android:layout_margin="@dimen/_5sdp"
+            android:padding="@dimen/_5sdp"
+            android:layout_below="@id/txt_job_employee_detail"
+            android:layout_centerHorizontal="true"
+            android:background="#4F6472"
+            />
+
+        <RelativeLayout
+            android:id="@+id/relative_work"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/txt_pictures"
+            android:layout_margin="@dimen/_5sdp"
+            android:padding="@dimen/_5sdp"
+            android:background="@drawable/bg_works"
+            >
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/r_v_work_employee"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                />
+
+            <ProgressBar
+                android:id="@+id/loading_works"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminateTint="@color/black"
+                android:layout_margin="@dimen/_3sdp"
+                android:layout_centerInParent="true"
+                android:visibility="gone"
+                />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/linear_contact"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/relative_work"
+            android:layout_margin="@dimen/_5ssp"
+            android:padding="@dimen/_5sdp"
+            android:gravity="center"
+            >
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_phone_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_phone"
+                app:backgroundTint="@color/white"
+                android:layout_margin="@dimen/_3sdp"
+                />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_email"
+                app:backgroundTint="@color/white"
+                android:layout_margin="@dimen/_3sdp"
+                />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_message"
+                app:backgroundTint="@color/white"
+                android:layout_margin="@dimen/_3sdp"
+                />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Contact us"
+            android:textColor="#00558A"
+            android:textSize="@dimen/_15ssp"
+            android:textStyle="bold"
+            android:layout_margin="@dimen/_5sdp"
+            android:padding="@dimen/_5sdp"
+            android:layout_below="@id/linear_contact"
+            android:layout_centerHorizontal="true"
+            />
+
+
+    </RelativeLayout>
+
+  </androidx.core.widget.NestedScrollView>
+</layout>

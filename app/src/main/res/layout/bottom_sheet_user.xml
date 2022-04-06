@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <RelativeLayout
+        android:id="@+id/relaive_bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/img_bottom_sheet_user"
+            android:layout_width="@dimen/_130sdp"
+            android:layout_height="@dimen/_130sdp"
+            android:layout_margin="@dimen/_5sdp"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/ic_name"
+            />
+
+        <TextView
+            android:id="@+id/txt_name_bottom_sheet_user"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_17ssp"
+            android:textColor="@color/black"
+            android:layout_margin="@dimen/_5sdp"
+            android:layout_below="@id/img_bottom_sheet_user"
+            android:padding="@dimen/_5ssp"
+            android:drawableStart="@drawable/ic_name"
+            android:drawablePadding="@dimen/_5sdp"
+            />
+
+        <TextView
+            android:id="@+id/txt_phone_bottom_sheet_user"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_17ssp"
+            android:textColor="@color/black"
+            android:layout_margin="@dimen/_5sdp"
+            android:layout_below="@id/txt_name_bottom_sheet_user"
+            android:padding="@dimen/_5ssp"
+            android:drawableStart="@drawable/ic_phone"
+            android:drawablePadding="@dimen/_5sdp"
+            />
+
+        <TextView
+            android:id="@+id/txt_email_bottom_sheet_user"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_17ssp"
+            android:textColor="@color/black"
+            android:layout_margin="@dimen/_5sdp"
+            android:layout_below="@id/txt_phone_bottom_sheet_user"
+            android:padding="@dimen/_5ssp"
+            android:drawableStart="@drawable/ic_email"
+            android:drawablePadding="@dimen/_5sdp"
+            />
+
+        <TextView
+            android:id="@+id/txt_gender_bottom_sheet_user"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_17ssp"
+            android:textColor="@color/black"
+            android:layout_margin="@dimen/_5sdp"
+            android:layout_below="@id/txt_email_bottom_sheet_user"
+            android:padding="@dimen/_5ssp"
+            />
+
+
+        <Button
+            android:id="@+id/btn_ok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_5sdp"
+            android:background="@drawable/button_create_new_account"
+            app:backgroundTint="@null"
+            android:text="Ok"
+            android:textColor="@color/white"
+            android:textAllCaps="false"
+            android:textSize="@dimen/_20ssp"
+            android:padding="@dimen/_10sdp"
+            android:clickable="false"
+            android:layout_below="@id/txt_gender_bottom_sheet_user"
+            android:layout_centerHorizontal="true"
+            />
+
+        <ProgressBar
+            android:id="@+id/loading_bottom_sheet_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminateTint="@color/black"
+            android:layout_margin="@dimen/_5sdp"
+            android:padding="@dimen/_5sdp"
+            android:visibility="gone"
+            android:layout_below="@id/txt_gender_bottom_sheet_user"
+            android:layout_centerHorizontal="true"
+            />
+
+
+
+    </RelativeLayout>
+</layout>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#E6F1F7"
+        android:padding="@dimen/_5sdp"
+        >
+
+        <ImageView
+            android:id="@+id/item_img_service"
+            android:layout_width="@dimen/_130sdp"
+            android:layout_height="@dimen/_130sdp"
+            android:layout_margin="@dimen/_5sdp"
+            android:layout_centerHorizontal="true"
+            android:src="@mipmap/ic_launcher" />
+
+
+        <TextView
+            android:id="@+id/item_txt_service"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_5sdp"
+            android:text="Name Service"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_15ssp"
+            android:textStyle="bold"
+            android:layout_below="@id/item_img_service"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
+</layout>
