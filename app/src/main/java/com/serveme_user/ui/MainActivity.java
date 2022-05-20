@@ -27,7 +27,13 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
-        navController = Navigation.findNavController(MainActivity.this, R.id.nav_host);
+        initViews(MainActivity.this);
+
+    }
+
+    private void initViews(MainActivity mainActivity)
+    {
+        navController = Navigation.findNavController(mainActivity, R.id.nav_host);
         NavigationUI.setupWithNavController(binding.bottomNavView, navController);
         navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener()
         {
@@ -53,6 +59,5 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
-
     }
 }

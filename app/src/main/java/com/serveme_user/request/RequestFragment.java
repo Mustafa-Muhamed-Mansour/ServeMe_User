@@ -62,7 +62,7 @@ public class RequestFragment extends Fragment
 
     private SharedPreferences sharedPref;
     public static final String KEY_SHARED_PREF = "myPref";
-    private String id;
+    private String id, randomKey;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -76,6 +76,16 @@ public class RequestFragment extends Fragment
     {
         super.onViewCreated(view, savedInstanceState);
 
+
+        initViews(view);
+        initDatabase();
+        retriveData();
+        clickedViews();
+
+    }
+
+    private void initViews(View view)
+    {
         navController = Navigation.findNavController(view);
 
         userModel = new UserModel();
@@ -88,13 +98,18 @@ public class RequestFragment extends Fragment
         binding.rVRequest.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         binding.rVRequest.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         binding.rVRequest.setAdapter(requestAdapter);
+    }
 
-        String randomKey = FirebaseDatabase.getInstance().getReference().push().getKey();
+    private void initDatabase()
+    {
+        randomKey = FirebaseDatabase.getInstance().getReference().push().getKey();
         firebaseAuth = FirebaseAuth.getInstance();
         retriveRef = FirebaseDatabase.getInstance().getReference();
+    }
 
+    private void retriveData()
+    {
         binding.loadingRequest.setVisibility(View.VISIBLE);
-
         retriveRef
                 .child("Users")
                 .child(firebaseAuth.getUid())
@@ -122,7 +137,10 @@ public class RequestFragment extends Fragment
                         Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
 
+    private void clickedViews()
+    {
         binding.btnDone.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -205,8 +223,8 @@ public class RequestFragment extends Fragment
                                         bottomSheetUserBinding.btnOk.setVisibility(View.GONE);
 
                                         Toast.makeText(getContext(), "Done Yes", Toast.LENGTH_SHORT).show();
-                                        navController.navigate(R.id.action_requestFragment_to_homeFragment);
-
+//                                        navController.navigate(R.id.action_requestFragment_to_homeFragment);
+                                        Navigation.findNavController(view).navigate(R.id.homeFragment);
                                         retriveRef
                                                 .child("Users")
                                                 .child(firebaseAuth.getUid())
@@ -237,6 +255,5 @@ public class RequestFragment extends Fragment
                 bottomSheet.show();
             }
         });
-
     }
 }

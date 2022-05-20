@@ -55,8 +55,26 @@ public class EmployeeHomeFragment extends Fragment
     {
         super.onViewCreated(view, savedInstanceState);
 
-        navController = Navigation.findNavController(view);
 
+        initVeiws(view);
+        clickedViews();
+        initDatabase();
+        retriveData();
+
+    }
+
+    private void initVeiws(View view)
+    {
+        navController = Navigation.findNavController(view);
+        employeeModels = new ArrayList<>();
+        employeeAdapter = new EmployeeAdapter(employeeModels);
+        binding.rVEmployee.setAdapter(employeeAdapter);
+        binding.rVEmployee.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        binding.rVEmployee.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
+    }
+
+    private void clickedViews()
+    {
         binding.imgBackEmployee.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -65,15 +83,15 @@ public class EmployeeHomeFragment extends Fragment
                 navController.navigate(R.id.action_employeeHomeFragment_to_homeFragment);
             }
         });
+    }
 
-        employeeModels = new ArrayList<>();
-        employeeAdapter = new EmployeeAdapter(employeeModels);
-        binding.rVEmployee.setAdapter(employeeAdapter);
-        binding.rVEmployee.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        binding.rVEmployee.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
-
+    private void initDatabase()
+    {
         retriveRef = FirebaseDatabase.getInstance().getReference();
+    }
 
+    private void retriveData()
+    {
         EmployeeHomeFragmentArgs job = EmployeeHomeFragmentArgs.fromBundle(getArguments());
         JOB = job.getJob();
         retriveRef

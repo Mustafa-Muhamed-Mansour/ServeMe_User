@@ -43,7 +43,9 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class MessageFragment extends Fragment {
+public class MessageFragment extends Fragment
+{
+
 
     private NavController navController;
     private FragmentMessageBinding binding;
@@ -68,17 +70,33 @@ public class MessageFragment extends Fragment {
     {
         super.onViewCreated(view, savedInstanceState);
 
-        navController = Navigation.findNavController(view);
 
+        initViews(view);
+        initDatabase();
+        retriveData();
+        clickedViews();
+
+
+    }
+
+    private void initViews(View view)
+    {
+        navController = Navigation.findNavController(view);
         messageModels = new ArrayList<>();
         messageAdapter = new MessageAdapter(messageModels);
         binding.rVMessage.setAdapter(messageAdapter);
         binding.rVMessage.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         binding.rVMessage.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+    }
 
+    private void initDatabase()
+    {
         firebaseAuth = FirebaseAuth.getInstance();
         retriveRef = FirebaseDatabase.getInstance().getReference();
+    }
 
+    private void retriveData()
+    {
         retriveRef
                 .child("Messages")
                 .child(firebaseAuth.getUid())
@@ -103,7 +121,10 @@ public class MessageFragment extends Fragment {
                         Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
 
+    private void clickedViews()
+    {
         binding.fabSend.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -149,7 +170,5 @@ public class MessageFragment extends Fragment {
                 }
             }
         });
-
-
     }
 }

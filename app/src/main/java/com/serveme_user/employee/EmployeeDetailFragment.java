@@ -39,7 +39,7 @@ public class EmployeeDetailFragment extends Fragment
     private NavController navController;
     private FragmentEmployeeDetailBinding binding;
 
-    private String id, firstName, lastName, image, job, phoneNumber, email, idRef;
+    private String randomKey, id, firstName, lastName, image, job, phoneNumber, email, idRef;
 
     private ArrayList<WorkModel> workModels;
     private WorkAdapter workAdapter;
@@ -59,8 +59,28 @@ public class EmployeeDetailFragment extends Fragment
     {
         super.onViewCreated(view, savedInstanceState);
 
-        navController = Navigation.findNavController(view);
 
+        initViews(view);
+        retriveBundle();
+        initDatabase();
+        retriiveData();
+        clickedViews();
+
+
+    }
+
+    private void initViews(View view)
+    {
+        navController = Navigation.findNavController(view);
+        workModels = new ArrayList<>();
+        workAdapter = new WorkAdapter(workModels);
+        binding.rVWorkEmployee.setAdapter(workAdapter);
+        binding.rVWorkEmployee.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+//        binding.rVWorkEmployee.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
+    }
+
+    private void retriveBundle()
+    {
         id = getArguments().getString("employeeID");
 
         firstName = getArguments().getString("employeeFN");
@@ -82,36 +102,23 @@ public class EmployeeDetailFragment extends Fragment
                 .into(binding.imgEmployeeDetail);
 
         phoneNumber = getArguments().getString("employeePhoneNumber");
-        binding.fabPhoneNumber.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                Intent intent = new Intent(Intent.ACTION_CALL);
-                intent.setData(Uri.parse("tel:" + phoneNumber));
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                getActivity().startActivity(intent);
-            }
-        });
 
 //        email = getArguments().getString("employeeEmail");
 //        binding.fabEmail.setTextAlignment(email);
+    }
 
-
-        workModels = new ArrayList<>();
-        workAdapter = new WorkAdapter(workModels);
-        binding.rVWorkEmployee.setAdapter(workAdapter);
-        binding.rVWorkEmployee.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-//        binding.rVWorkEmployee.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
-
-        String randomKey = FirebaseDatabase.getInstance().getReference().push().getKey();
+    private void initDatabase()
+    {
+        randomKey = FirebaseDatabase.getInstance().getReference().push().getKey();
         firebaseAuth = FirebaseAuth.getInstance();
         retriiveRef = FirebaseDatabase.getInstance().getReference();
         requestRef = FirebaseDatabase.getInstance().getReference();
         idRef = FirebaseDatabase.getInstance().getReference().push().getKey();
+    }
 
+    private void retriiveData()
+    {
         binding.loadingWorks.setVisibility(View.VISIBLE);
-
         retriiveRef
                 .child("Employees")
                 .child(id)
@@ -138,15 +145,21 @@ public class EmployeeDetailFragment extends Fragment
                         Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
 
-//        binding.imgBtnBack.setOnClickListener(new View.OnClickListener()
-//        {
-//            @Override
-//            public void onClick(View view)
-//            {
-//                navController.navigate(R.id.action_employeeDetailFragment_to_homeFragment);
-//            }
-//        });
+    private void clickedViews()
+    {
+        binding.fabPhoneNumber.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                Intent intent = new Intent(Intent.ACTION_CALL);
+                intent.setData(Uri.parse("tel:" + phoneNumber));
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                getActivity().startActivity(intent);
+            }
+        });
 
         binding.btnBookNow.setOnClickListener(new View.OnClickListener()
         {
@@ -185,7 +198,8 @@ public class EmployeeDetailFragment extends Fragment
             @Override
             public void onClick(View view)
             {
-                navController.navigate(R.id.action_employeeDetailFragment_to_messageFragment);
+                Navigation.findNavController(view).navigate(R.id.messageFragment);
+//                navController.navigate(R.id.action_employeeDetailFragment_to_messageFragment);
             }
         });
     }

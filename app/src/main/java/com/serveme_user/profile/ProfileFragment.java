@@ -44,11 +44,29 @@ public class ProfileFragment extends Fragment
     {
         super.onViewCreated(view, savedInstanceState);
 
-        navController = Navigation.findNavController(view);
 
+
+        initViews(view);
+        initDatabase();
+        retriveData();
+        clickedViews();
+
+
+    }
+
+    private void initViews(View view)
+    {
+        navController = Navigation.findNavController(view);
+    }
+
+    private void initDatabase()
+    {
         firebaseAuth = FirebaseAuth.getInstance();
         retriveRef = FirebaseDatabase.getInstance().getReference();
+    }
 
+    private void retriveData()
+    {
         retriveRef
                 .child("Users")
                 .child(firebaseAuth.getUid())
@@ -104,13 +122,17 @@ public class ProfileFragment extends Fragment
                 Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
 
+    private void clickedViews()
+    {
         binding.btnSaveProfile.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-                navController.navigate(R.id.action_profileFragment_to_homeFragment);
+                Navigation.findNavController(view).navigate(R.id.homeFragment);
+//                navController.navigate(R.id.action_profileFragment_to_homeFragment);
             }
         });
 
@@ -120,7 +142,8 @@ public class ProfileFragment extends Fragment
             public void onClick(View view)
             {
                 firebaseAuth.signOut();
-                navController.navigate(R.id.action_profileFragment_to_loginFragment);
+//                navController.navigate(R.id.action_profileFragment_to_loginFragment);
+                Navigation.findNavController(view).navigate(R.id.loginFragment);
             }
         });
     }

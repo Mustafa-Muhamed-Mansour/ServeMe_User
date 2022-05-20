@@ -35,17 +35,28 @@ public class AllServicesFragment extends Fragment
     {
         super.onViewCreated(view, savedInstanceState);
 
-        navController = Navigation.findNavController(view);
 
+        initView(view);
+        clickedView();
+
+        
+    }
+
+    private void initView(View view)
+    {
+        navController = Navigation.findNavController(view);
+    }
+
+    private void clickedView()
+    {
         binding.imgBtnBack.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-                navController.navigate(R.id.action_allServicesFragment_to_homeFragment);
+//                navController.navigate(R.id.action_allServicesFragment_to_homeFragment);
+                Navigation.findNavController(view).navigate(R.id.homeFragment);
             }
         });
-
-        
     }
 }

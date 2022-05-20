@@ -76,307 +76,37 @@ public class RegisterFragment extends Fragment
     {
         super.onViewCreated(view, savedInstanceState);
 
-        navController = Navigation.findNavController(view);
 
+        initViews(view);
+        initDatabase();
+        backgoundProcess();
+        clickedViews();
+
+
+    }
+
+    private void initViews(View view)
+    {
+        navController = Navigation.findNavController(view);
         signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
-        firebaseAuth = FirebaseAuth.getInstance();
         signInClient = GoogleSignIn.getClient(getActivity(), signInOptions);
+    }
+
+    private void initDatabase()
+    {
+        firebaseAuth = FirebaseAuth.getInstance();
         idRef = FirebaseDatabase.getInstance().getReference().push().getKey();
         imageRef = FirebaseStorage.getInstance().getReference().child("Images").child("Image_Users").child(idRef);
         ID = firebaseAuth.getUid();
         databaseRef = FirebaseDatabase.getInstance().getReference();
 //        databaseRef = FirebaseFirestore.getInstance();
+    }
 
-        binding.imgAddPhoto.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                OpenGallery();
-            }
-        });
-
-        binding.radioBtnMale.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                int i = binding.radioGender.getCheckedRadioButtonId();
-                radioButton = view.findViewById(i);
-            }
-        });
-
-        binding.radioBtnCustom.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                int i = binding.radioGender.getCheckedRadioButtonId();
-                radioButton = view.findViewById(i);
-            }
-        });
-
-        binding.radioBtnFemale.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                int i = binding.radioGender.getCheckedRadioButtonId();
-                radioButton = view.findViewById(i);
-            }
-        });
-
-//        binding.imgBtnGoogle.setOnClickListener(new View.OnClickListener()
-//        {
-//            @Override
-//            public void onClick(View view)
-//            {
-//                signIn();
-//            }
-//        });
-
-        binding.btnCreateAccount.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                String firstName = binding.editFnRegister.getText().toString();
-                String lastName = binding.editLnRegister.getText().toString();
-                String phoneNumber = binding.editPhoneRegister.getText().toString();
-                String email = binding.editEmailRegister.getText().toString();
-                String password = binding.editPasswordRegister.getText().toString();
-
-                if (resultURI == null)
-                {
-                    Snackbar.make(binding.parentNestedRegister, "Please enter your image", Snackbar.LENGTH_SHORT).show();
-                    return;
-                }
-
-                if (TextUtils.isEmpty(firstName))
-                {
-                    Snackbar.make(binding.parentNestedRegister, "Please enter your first name", Snackbar.LENGTH_SHORT).show();
-                    binding.editFnRegister.requestFocus();
-                    return;
-                }
-
-                if (TextUtils.isEmpty(lastName))
-                {
-                    Snackbar.make(binding.parentNestedRegister, "Please enter your last name", Snackbar.LENGTH_SHORT).show();
-                    binding.editLnRegister.requestFocus();
-                    return;
-                }
-
-                if (TextUtils.isEmpty(phoneNumber))
-                {
-                    Snackbar.make(binding.parentNestedRegister, "Please enter your phone number", Snackbar.LENGTH_SHORT).show();
-                    binding.editPhoneRegister.requestFocus();
-                    return;
-                }
-
-                if (TextUtils.isEmpty(email))
-                {
-                    Snackbar.make(binding.parentNestedRegister, "Please enter your email", Snackbar.LENGTH_SHORT).show();
-                    binding.editEmailRegister.requestFocus();
-                    return;
-                }
-
-                if (TextUtils.isEmpty(password))
-                {
-                    Snackbar.make(binding.parentNestedRegister, "Please enter your password", Snackbar.LENGTH_SHORT).show();
-                    binding.editPasswordRegister.requestFocus();
-                    return;
-                }
-
-                else
-                {
-                    String randomKey = FirebaseDatabase.getInstance().getReference().push().getKey();
-
-                    binding.loadingRegister.setVisibility(View.VISIBLE);
-                    binding.btnCreateAccount.setVisibility(View.GONE);
-
-                    firebaseAuth
-                            .createUserWithEmailAndPassword(email, password)
-                            .addOnCompleteListener(new OnCompleteListener<AuthResult>()
-                            {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task)
-                                {
-                                    if (task.isSuccessful())
-                                    {
-                                        imageRef
-                                                .putFile(resultURI)
-                                                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>()
-                                                {
-                                                    @Override
-                                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot)
-                                                    {
-                                                        imageRef
-                                                                .getDownloadUrl()
-                                                                .addOnSuccessListener(new OnSuccessListener<Uri>()
-                                                                {
-                                                                    @Override
-                                                                    public void onSuccess(Uri uri)
-                                                                    {
-                                                                        UserModel userModel = new UserModel(randomKey, firebaseAuth.getUid(), uri.toString(), firstName, lastName, phoneNumber, email, radioButton.getText().toString());
-
-                                                                        databaseRef
-                                                                                .child("Users")
-                                                                                .child(firebaseAuth.getUid())
-                                                                                .setValue(userModel);
-//                                                                        databaseRef
-//                                                                                .child("Jobs")
-//                                                                                .child(job)
-//                                                                                .child(randomKey)
-//                                                                                .setValue(userModel);
-
-//                                                                    databaseRef
-//                                                                            .child("Employees")
-//                                                                            .child(ID)
-//                                                                            .setValue(employeeModel);
-//                                                                        databaseRef
-//                                                                                .collection("Employees")
-//                                                                                .document(ID)
-//                                                                                .set(employeeModel);
-
-//                                                                        databaseRef
-//                                                                                .collection("Jobs")
-//                                                                                .document(job)
-//                                                                                .collection(randomKey)
-//                                                                                .document()
-//                                                                                .set(employeeModel);
-                                                                        binding.imgAddPhoto.setImageURI(null);
-
-                                                                        binding.loadingRegister.setVisibility(View.GONE);
-                                                                        Toast.makeText(getActivity(), "Done", Toast.LENGTH_SHORT).show();
-                                                                        navController.navigate(R.id.action_registerFragment_to_homeFragment);
-                                                                    }
-                                                                }).addOnFailureListener(new OnFailureListener()
-                                                        {
-                                                            @Override
-                                                            public void onFailure(@NonNull Exception e)
-                                                            {
-                                                                binding.loadingRegister.setVisibility(View.GONE);
-                                                                binding.btnCreateAccount.setVisibility(View.VISIBLE);
-                                                                Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                                                            }
-                                                        });
-//                                                        EmployeeModel employeeModel = new EmployeeModel(randomKey, ID, resultURI.toString(), firstName, lastName, phoneNumber, email, job, radioButton.getText().toString());
-////                                                                    databaseRef
-////                                                                            .child("Employees")
-////                                                                            .child(ID)
-////                                                                            .setValue(employeeModel);
-//                                                        databaseRef
-//                                                                .collection("Employees")
-//                                                                .document(ID)
-//                                                                .set(employeeModel);
-//
-//                                                        binding.imgAddPhoto.setImageURI(null);
-//
-//                                                        binding.loadingRegister.setVisibility(View.GONE);
-//                                                        Toast.makeText(getActivity(), "Done", Toast.LENGTH_SHORT).show();
-//                                                        navController.navigate(R.id.action_registerFragment_to_homeFragment);
-                                                    }
-                                                }).addOnFailureListener(new OnFailureListener()
-                                        {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e)
-                                            {
-                                                binding.loadingRegister.setVisibility(View.GONE);
-                                                binding.btnCreateAccount.setVisibility(View.VISIBLE);
-                                                Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
-                                    }
-
-                                    else
-                                    {
-                                        Toast.makeText(getActivity(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
-//                            .addOnSuccessListener(new OnSuccessListener<AuthResult>()
-//                            {
-//                                @Override
-//                                public void onSuccess(AuthResult authResult)
-//                                {
-//                                    imageRef
-//                                            .putFile(resultURI)
-//                                            .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>()
-//                                            {
-//                                                @Override
-//                                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot)
-//                                                {
-//                                                    imageRef
-//                                                            .getDownloadUrl()
-//                                                            .addOnSuccessListener(new OnSuccessListener<Uri>()
-//                                                            {
-//                                                                @Override
-//                                                                public void onSuccess(Uri uri)
-//                                                                {
-//                                                                    EmployeeModel employeeModel = new EmployeeModel(randomKey, ID, uri.toString(), firstName, lastName, phoneNumber, email, job, radioButton.getText().toString());
-////                                                                    databaseRef
-////                                                                            .child("Employees")
-////                                                                            .child(ID)
-////                                                                            .setValue(employeeModel);
-//                                                                    databaseRef
-//                                                                            .collection("Employees")
-//                                                                            .document(ID)
-//                                                                            .set(employeeModel);
-//
-//                                                                    binding.loadingRegister.setVisibility(View.GONE);
-//                                                                    Toast.makeText(getActivity(), "Done", Toast.LENGTH_SHORT).show();
-//                                                                    navController.navigate(R.id.action_registerFragment_to_homeFragment);
-//                                                                }
-//                                                            }).addOnFailureListener(new OnFailureListener()
-//                                                    {
-//                                                        @Override
-//                                                        public void onFailure(@NonNull Exception e)
-//                                                        {
-//                                                            binding.loadingRegister.setVisibility(View.GONE);
-//                                                            binding.btnCreateAccount.setVisibility(View.VISIBLE);
-//                                                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-//                                                        }
-//                                                    });
-//                                                }
-//                                            }).addOnFailureListener(new OnFailureListener()
-//                                    {
-//                                        @Override
-//                                        public void onFailure(@NonNull Exception e)
-//                                        {
-//                                            binding.loadingRegister.setVisibility(View.GONE);
-//                                            binding.btnCreateAccount.setVisibility(View.VISIBLE);
-//                                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-//                                        }
-//                                    });
-//
-////                                    EmployeeModel employeeModel = new EmployeeModel(randomKey, ID, "uri.toString()", firstName, lastName, phoneNumber, email, job, radioButton.getText().toString());
-////                                    databaseRef
-////                                            .collection("Employees")
-////                                            .document(ID)
-////                                            .set(employeeModel);
-////
-////                                    binding.loadingRegister.setVisibility(View.GONE);
-////                                    Toast.makeText(getActivity(), "Done", Toast.LENGTH_SHORT).show();
-////                                    navController.navigate(R.id.action_registerFragment_to_homeFragment);
-//
-//                                }
-//                            }).addOnFailureListener(new OnFailureListener()
-//                    {
-//                        @Override
-//                        public void onFailure(@NonNull Exception e)
-//                        {
-//                            binding.loadingRegister.setVisibility(View.GONE);
-//                            binding.btnCreateAccount.setVisibility(View.VISIBLE);
-//                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-//                        }
-//                    });
-                }
-            }
-        });
-
+    private void backgoundProcess()
+    {
         someActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>()
         {
             @Override
@@ -584,15 +314,303 @@ public class RegisterFragment extends Fragment
 //        });
     }
 
+    private void clickedViews()
+    {
+        binding.imgAddPhoto.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                OpenGallery();
+            }
+        });
+
+        binding.radioBtnMale.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                int i = binding.radioGender.getCheckedRadioButtonId();
+                radioButton = view.findViewById(i);
+            }
+        });
+
+        binding.radioBtnCustom.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                int i = binding.radioGender.getCheckedRadioButtonId();
+                radioButton = view.findViewById(i);
+            }
+        });
+
+        binding.radioBtnFemale.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                int i = binding.radioGender.getCheckedRadioButtonId();
+                radioButton = view.findViewById(i);
+            }
+        });
+
+//        binding.imgBtnGoogle.setOnClickListener(new View.OnClickListener()
+//        {
+//            @Override
+//            public void onClick(View view)
+//            {
+//                signIn();
+//            }
+//        });
+
+        binding.btnCreateAccount.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                String firstName = binding.editFnRegister.getText().toString();
+                String lastName = binding.editLnRegister.getText().toString();
+                String phoneNumber = binding.editPhoneRegister.getText().toString();
+                String email = binding.editEmailRegister.getText().toString();
+                String password = binding.editPasswordRegister.getText().toString();
+
+                if (resultURI == null)
+                {
+                    Snackbar.make(binding.parentNestedRegister, "Please enter your image", Snackbar.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (TextUtils.isEmpty(firstName))
+                {
+                    Snackbar.make(binding.parentNestedRegister, "Please enter your first name", Snackbar.LENGTH_SHORT).show();
+                    binding.editFnRegister.requestFocus();
+                    return;
+                }
+
+                if (TextUtils.isEmpty(lastName))
+                {
+                    Snackbar.make(binding.parentNestedRegister, "Please enter your last name", Snackbar.LENGTH_SHORT).show();
+                    binding.editLnRegister.requestFocus();
+                    return;
+                }
+
+                if (TextUtils.isEmpty(phoneNumber))
+                {
+                    Snackbar.make(binding.parentNestedRegister, "Please enter your phone number", Snackbar.LENGTH_SHORT).show();
+                    binding.editPhoneRegister.requestFocus();
+                    return;
+                }
+
+                if (TextUtils.isEmpty(email))
+                {
+                    Snackbar.make(binding.parentNestedRegister, "Please enter your email", Snackbar.LENGTH_SHORT).show();
+                    binding.editEmailRegister.requestFocus();
+                    return;
+                }
+
+                if (TextUtils.isEmpty(password))
+                {
+                    Snackbar.make(binding.parentNestedRegister, "Please enter your password", Snackbar.LENGTH_SHORT).show();
+                    binding.editPasswordRegister.requestFocus();
+                    return;
+                }
+
+                else
+                {
+                    String randomKey = FirebaseDatabase.getInstance().getReference().push().getKey();
+
+                    binding.loadingRegister.setVisibility(View.VISIBLE);
+                    binding.btnCreateAccount.setVisibility(View.GONE);
+
+                    firebaseAuth
+                            .createUserWithEmailAndPassword(email, password)
+                            .addOnCompleteListener(new OnCompleteListener<AuthResult>()
+                            {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task)
+                                {
+                                    if (task.isSuccessful())
+                                    {
+                                        imageRef
+                                                .putFile(resultURI)
+                                                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>()
+                                                {
+                                                    @Override
+                                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot)
+                                                    {
+                                                        imageRef
+                                                                .getDownloadUrl()
+                                                                .addOnSuccessListener(new OnSuccessListener<Uri>()
+                                                                {
+                                                                    @Override
+                                                                    public void onSuccess(Uri uri)
+                                                                    {
+                                                                        UserModel userModel = new UserModel(randomKey, firebaseAuth.getUid(), uri.toString(), firstName, lastName, phoneNumber, email, radioButton.getText().toString());
+
+                                                                        databaseRef
+                                                                                .child("Users")
+                                                                                .child(firebaseAuth.getUid())
+                                                                                .setValue(userModel);
+//                                                                        databaseRef
+//                                                                                .child("Jobs")
+//                                                                                .child(job)
+//                                                                                .child(randomKey)
+//                                                                                .setValue(userModel);
+
+//                                                                    databaseRef
+//                                                                            .child("Employees")
+//                                                                            .child(ID)
+//                                                                            .setValue(employeeModel);
+//                                                                        databaseRef
+//                                                                                .collection("Employees")
+//                                                                                .document(ID)
+//                                                                                .set(employeeModel);
+
+//                                                                        databaseRef
+//                                                                                .collection("Jobs")
+//                                                                                .document(job)
+//                                                                                .collection(randomKey)
+//                                                                                .document()
+//                                                                                .set(employeeModel);
+                                                                        binding.imgAddPhoto.setImageURI(null);
+
+                                                                        binding.loadingRegister.setVisibility(View.GONE);
+                                                                        Toast.makeText(getActivity(), "Done", Toast.LENGTH_SHORT).show();
+//                                                                        navController.navigate(R.id.action_registerFragment_to_homeFragment);
+                                                                        Navigation.findNavController(view).navigate(R.id.homeFragment);
+                                                                    }
+                                                                }).addOnFailureListener(new OnFailureListener()
+                                                        {
+                                                            @Override
+                                                            public void onFailure(@NonNull Exception e)
+                                                            {
+                                                                binding.loadingRegister.setVisibility(View.GONE);
+                                                                binding.btnCreateAccount.setVisibility(View.VISIBLE);
+                                                                Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                            }
+                                                        });
+//                                                        EmployeeModel employeeModel = new EmployeeModel(randomKey, ID, resultURI.toString(), firstName, lastName, phoneNumber, email, job, radioButton.getText().toString());
+////                                                                    databaseRef
+////                                                                            .child("Employees")
+////                                                                            .child(ID)
+////                                                                            .setValue(employeeModel);
+//                                                        databaseRef
+//                                                                .collection("Employees")
+//                                                                .document(ID)
+//                                                                .set(employeeModel);
+//
+//                                                        binding.imgAddPhoto.setImageURI(null);
+//
+//                                                        binding.loadingRegister.setVisibility(View.GONE);
+//                                                        Toast.makeText(getActivity(), "Done", Toast.LENGTH_SHORT).show();
+//                                                        navController.navigate(R.id.action_registerFragment_to_homeFragment);
+                                                    }
+                                                }).addOnFailureListener(new OnFailureListener()
+                                        {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e)
+                                            {
+                                                binding.loadingRegister.setVisibility(View.GONE);
+                                                binding.btnCreateAccount.setVisibility(View.VISIBLE);
+                                                Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    }
+
+                                    else
+                                    {
+                                        Toast.makeText(getActivity(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+//                            .addOnSuccessListener(new OnSuccessListener<AuthResult>()
+//                            {
+//                                @Override
+//                                public void onSuccess(AuthResult authResult)
+//                                {
+//                                    imageRef
+//                                            .putFile(resultURI)
+//                                            .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>()
+//                                            {
+//                                                @Override
+//                                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot)
+//                                                {
+//                                                    imageRef
+//                                                            .getDownloadUrl()
+//                                                            .addOnSuccessListener(new OnSuccessListener<Uri>()
+//                                                            {
+//                                                                @Override
+//                                                                public void onSuccess(Uri uri)
+//                                                                {
+//                                                                    EmployeeModel employeeModel = new EmployeeModel(randomKey, ID, uri.toString(), firstName, lastName, phoneNumber, email, job, radioButton.getText().toString());
+////                                                                    databaseRef
+////                                                                            .child("Employees")
+////                                                                            .child(ID)
+////                                                                            .setValue(employeeModel);
+//                                                                    databaseRef
+//                                                                            .collection("Employees")
+//                                                                            .document(ID)
+//                                                                            .set(employeeModel);
+//
+//                                                                    binding.loadingRegister.setVisibility(View.GONE);
+//                                                                    Toast.makeText(getActivity(), "Done", Toast.LENGTH_SHORT).show();
+//                                                                    navController.navigate(R.id.action_registerFragment_to_homeFragment);
+//                                                                }
+//                                                            }).addOnFailureListener(new OnFailureListener()
+//                                                    {
+//                                                        @Override
+//                                                        public void onFailure(@NonNull Exception e)
+//                                                        {
+//                                                            binding.loadingRegister.setVisibility(View.GONE);
+//                                                            binding.btnCreateAccount.setVisibility(View.VISIBLE);
+//                                                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+//                                                        }
+//                                                    });
+//                                                }
+//                                            }).addOnFailureListener(new OnFailureListener()
+//                                    {
+//                                        @Override
+//                                        public void onFailure(@NonNull Exception e)
+//                                        {
+//                                            binding.loadingRegister.setVisibility(View.GONE);
+//                                            binding.btnCreateAccount.setVisibility(View.VISIBLE);
+//                                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+//                                        }
+//                                    });
+//
+////                                    EmployeeModel employeeModel = new EmployeeModel(randomKey, ID, "uri.toString()", firstName, lastName, phoneNumber, email, job, radioButton.getText().toString());
+////                                    databaseRef
+////                                            .collection("Employees")
+////                                            .document(ID)
+////                                            .set(employeeModel);
+////
+////                                    binding.loadingRegister.setVisibility(View.GONE);
+////                                    Toast.makeText(getActivity(), "Done", Toast.LENGTH_SHORT).show();
+////                                    navController.navigate(R.id.action_registerFragment_to_homeFragment);
+//
+//                                }
+//                            }).addOnFailureListener(new OnFailureListener()
+//                    {
+//                        @Override
+//                        public void onFailure(@NonNull Exception e)
+//                        {
+//                            binding.loadingRegister.setVisibility(View.GONE);
+//                            binding.btnCreateAccount.setVisibility(View.VISIBLE);
+//                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+//                        }
+//                    });
+                }
+            }
+        });
+    }
+
     private void OpenGallery()
     {
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
 //        intent.setAction(Intent.ACTION_GET_CONTENT);
         someActivityResultLauncher.launch(intent);
-//        CropImage
-//                .activity()
-//                .start(getContext(), this);
     }
 
 //    private void firebaseAuthWithGoogle(String idToken)

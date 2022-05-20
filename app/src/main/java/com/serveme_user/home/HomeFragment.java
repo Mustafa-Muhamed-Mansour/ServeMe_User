@@ -62,8 +62,18 @@ public class HomeFragment extends Fragment
     {
         super.onViewCreated(view, savedInstanceState);
 
-        navController = Navigation.findNavController(view);
 
+        initViews(view);
+        initDatabase();
+        clickedViews();
+        retriveData();
+        initAdmob();
+
+    }
+
+    private void initViews(View view)
+    {
+        navController = Navigation.findNavController(view);
         sliderModels = new ArrayList<>();
         sliderModels.add(new SliderModel(R.drawable.ic_plumber, "Plumber"));
         sliderModels.add(new SliderModel(R.drawable.ic_carpenter, "Carpenter"));
@@ -96,39 +106,20 @@ public class HomeFragment extends Fragment
         sliderImageAdapter = new SliderImageAdapter(sliderModels);
         binding.sliderImg.setSliderAdapter(sliderImageAdapter);
 
+        workModels = new ArrayList<>();
+        workAdapter = new WorkAdapter(workModels);
+        binding.rVWorks.setAdapter(workAdapter);
+        binding.rVWorks.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        binding.rVWorks.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.HORIZONTAL));
+    }
+
+    private void initDatabase()
+    {
         retriveRef = FirebaseDatabase.getInstance().getReference();
+    }
 
-//        serviceModels = new ArrayList<>();
-//        serviceAdapter = new ServiceAdapter(serviceModels);
-//        binding.rVServices.setAdapter(serviceAdapter);
-//        binding.rVServices.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-//        binding.rVServices.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.HORIZONTAL));
-//        binding.rVServices.setLayoutManager(new GridLayoutManager(getContext(), 2, RecyclerView.VERTICAL, false));
-//        retriveRef
-//                .child("Job")
-//                .addValueEventListener(new ValueEventListener()
-//                {
-//                    @SuppressLint("NotifyDataSetChanged")
-//                    @Override
-//                    public void onDataChange(@NonNull DataSnapshot snapshot)
-//                    {
-//
-//                        for (DataSnapshot dataSnapshot : snapshot.getChildren())
-//                        {
-////                            serviceModels.clear();
-//                            ServiceModel model = dataSnapshot.getValue(ServiceModel.class);
-//                            serviceModels.add(model);
-//                        }
-//                        serviceAdapter.notifyDataSetChanged();
-//                    }
-//
-//                    @Override
-//                    public void onCancelled(@NonNull DatabaseError error)
-//                    {
-//                        Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-
+    private void clickedViews()
+    {
         binding.txtAllServices.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -169,12 +160,10 @@ public class HomeFragment extends Fragment
             }
         });
 
-        workModels = new ArrayList<>();
-        workAdapter = new WorkAdapter(workModels);
-        binding.rVWorks.setAdapter(workAdapter);
-        binding.rVWorks.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-        binding.rVWorks.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.HORIZONTAL));
+    }
 
+    private void retriveData()
+    {
         binding.loadingAllWorks.setVisibility(View.VISIBLE);
         retriveRef
                 .child("Works")
@@ -201,8 +190,11 @@ public class HomeFragment extends Fragment
                         Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
 
-//    app-ID     ca-app-pub-7760695200810337~4005873206
+    private void initAdmob()
+    {
+//        app-ID     ca-app-pub-7760695200810337~4005873206
 //    unit-ID    ca-app-pub-7760695200810337/1188138175
 //        binding.adsView.setAdSize(AdSize.BANNER);
 //        binding.adsView.setAdUnitId("ca-app-pub-7760695200810337/1188138175");
@@ -216,6 +208,5 @@ public class HomeFragment extends Fragment
 //        });
         AdRequest adRequest = new AdRequest.Builder().build();
         binding.adsView.loadAd(adRequest);
-
     }
 }
